@@ -16,7 +16,8 @@ public class SecurityConfig extends AbstractSecurityWebSocketMessageBrokerConfig
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setApplicationDestinationPrefixes("/app");
+        registry.setApplicationDestinationPrefixes("/app")
+                .enableSimpleBroker("/users");
     }
 
     @Override

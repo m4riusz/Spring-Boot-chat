@@ -2,6 +2,7 @@ package com.msut.service;
 
 import com.msut.domain.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +12,9 @@ import java.util.List;
  */
 @Service
 public interface UserService extends UserDetailsService {
+
+    @Override
+    User loadUserByUsername(String username) throws UsernameNotFoundException;
 
     List<User> getAllUsers();
 }
