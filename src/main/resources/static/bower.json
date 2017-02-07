@@ -1,0 +1,21 @@
+{
+  "name": "chat",
+  "description": "Simple chat application",
+  "main": "app.js",
+  "authors": [
+    "msut"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "sockjs": "^0.3.4",
+    "stomp-client": "^0.0.2"
+  }
+}
