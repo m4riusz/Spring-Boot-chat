@@ -27,14 +27,16 @@ public class WebSocketController {
 
 
     @MessageMapping("/users.new")
-    @SendTo("/users.all")
+    @SendTo("/users.new")
     public User newLoggedUser(Principal principal) {
-        return userService.loadUserByUsername(principal.getName());
+        System.out.println(principal.getName());
+        return userService.addNewUser(principal.getName());
     }
 
-    @SubscribeMapping("/all")
+    @SubscribeMapping("/users.all")
     public List<User> getAllUsers() {
-        return userService.getAllUsers();
+        System.out.println(userService.getAllLoggedUsers());
+        return userService.getAllLoggedUsers();
     }
 
 }
