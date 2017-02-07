@@ -16,6 +16,7 @@
   ],
   "dependencies": {
     "sockjs": "^0.3.4",
-    "stomp-client": "^0.0.2"
+    "stomp-client": "^0.0.2",
+    "bootstrap": "^3.3.7"
   }
 }
