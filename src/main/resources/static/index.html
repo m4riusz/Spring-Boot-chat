@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <script src="bower_components/sockjs/sockjs.min.js"></script>
@@ -10,7 +10,17 @@
 </head>
 <body>
 <div id="main" class="container">
-    {{message}}
+    <h1 v-text="welcome"></h1>
+    <div class="form form-inline">
+        <a class="btn btn-default" v-on:click="connect" v-if="!connected">Connect</a>
+        <a class="btn btn-default" v-on:click="disconnect" v-if="connected">Disconnect</a>
+    </div>
+    <div v-if="connected">
+        You have been connected
+    </div>
+    <div v-else>
+        <h3>Please click button to connect</h3>
+    </div>
 </div>
 </body>
 </html>
@@ -19,7 +29,25 @@
     const main = new Vue({
         el: '#main',
         data: {
-            message: "Hello world"
+            welcome: "Welcome to simple chat application",
+            connected: false,
+            client: {}
+        },
+        methods: {
+            connect: function () {
+                let websocket = new SockJS("/ws");
+                this.client = Stomp.over(websocket);
+                this.client.connect({}, (frame) => {
+                    this.connected = true;
+                });
+            },
+
+            disconnect: function () {
+                this.client.disconnect(() => {
+                    this.connected = false;
+                });
+
+            }
         }
     });
 </script>
