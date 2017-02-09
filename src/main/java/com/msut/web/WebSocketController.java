@@ -29,8 +29,15 @@ public class WebSocketController {
     @MessageMapping("/users.new")
     @SendTo("/users.new")
     public User newLoggedUser(Principal principal) {
-        System.out.println(principal.getName());
         return userService.addNewUser(principal.getName());
+    }
+
+    @MessageMapping("/users.del")
+    @SendTo("/users.del")
+    public User disconnectFromServer(Principal principal) {
+        User user = userService.loadUserByUsername(principal.getName());
+        userService.removeUser(principal.getName());
+        return user;
     }
 
     @SubscribeMapping("/users.all")
