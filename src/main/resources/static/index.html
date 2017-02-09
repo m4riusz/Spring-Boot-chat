@@ -13,10 +13,11 @@
     <h1 v-text="welcome"></h1>
     <div class="form form-inline">
         <a class="btn btn-default" v-on:click="connect" v-if="!connected">Connect</a>
-        <a class="btn btn-default" v-on:click="disconnect" v-if="connected">Disconnect</a>
+        <a class="btn btn-default" v-on:click="disconnect" v-else>Disconnect</a>
     </div>
     <div v-if="connected">
-        You have been connected
+        You have been connected to server!
+        <p>People online {{users.length}}!</p>
     </div>
     <div v-else>
         <h3>Please click button to connect</h3>
@@ -31,7 +32,8 @@
         data: {
             welcome: "Welcome to simple chat application",
             connected: false,
-            client: {}
+            client: {},
+            users: []
         },
         methods: {
             connect: function () {
@@ -39,6 +41,7 @@
                 this.client = Stomp.over(websocket);
                 this.client.connect({}, (frame) => {
                     this.connected = true;
+                    this.subscribeToUsers();
                 });
             },
 
@@ -47,6 +50,16 @@
                     this.connected = false;
                 });
 
+            },
+
+            subscribeToUsers: function () {
+                this.client.subscribe("/app/users.all", (response) => {
+                    this.users = JSON.parse(response.body);
+                });
+                this.client.subscribe("/users.new", (response) => {
+                    this.users.push(JSON.parse(response.body));
+                });
+                this.client.send("/app/users.new", {}, "");
             }
         }
     });
