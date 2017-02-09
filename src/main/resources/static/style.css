@@ -1,0 +1,9 @@
+div#chat-window {
+    height: 300px;
+    overflow: scroll;
+    background: #e1e1e8;
+}
+
+input#message{
+
+}

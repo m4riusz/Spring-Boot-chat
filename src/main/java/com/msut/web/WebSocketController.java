@@ -26,21 +26,21 @@ public class WebSocketController {
     }
 
 
-    @MessageMapping("/users.new")
-    @SendTo("/users.new")
+    @MessageMapping("/chat.login")
+    @SendTo("/chat.login")
     public User newLoggedUser(Principal principal) {
         return userService.addNewUser(principal.getName());
     }
 
-    @MessageMapping("/users.del")
-    @SendTo("/users.del")
+    @MessageMapping("/chat.logout")
+    @SendTo("/chat.logout")
     public User disconnectFromServer(Principal principal) {
         User user = userService.loadUserByUsername(principal.getName());
         userService.removeUser(principal.getName());
         return user;
     }
 
-    @SubscribeMapping("/users.all")
+    @SubscribeMapping("/chat.users")
     public List<User> getAllUsers() {
         System.out.println(userService.getAllLoggedUsers());
         return userService.getAllLoggedUsers();
