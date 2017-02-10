@@ -1,7 +1,5 @@
 package com.msut.dto;
 
-import java.time.LocalDateTime;
-
 /**
  * Created by mariusz on 10.02.17.
  */
@@ -9,7 +7,7 @@ import java.time.LocalDateTime;
 public class MessageDto {
 
     private String id;
-    private LocalDateTime createDate;
+    private String createDate;
     private UserDto creator;
     private String content;
 
@@ -21,11 +19,11 @@ public class MessageDto {
         this.id = id;
     }
 
-    public LocalDateTime getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(LocalDateTime createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 
