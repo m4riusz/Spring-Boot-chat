@@ -1,6 +1,7 @@
 package com.msut.service;
 
 import com.msut.domain.User;
+import com.msut.dto.UserDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -16,11 +17,11 @@ public interface UserService extends UserDetailsService {
     @Override
     User loadUserByUsername(String username) throws UsernameNotFoundException;
 
-    User addNewUser(String username);
+    UserDto addNewUser(String username);
 
-    void removeUser(String username);
+    UserDto removeUser(String username);
 
-    List<User> getAllUsers();
+    List<UserDto> getAllUsers();
 
-    List<User> getAllLoggedUsers();
+    List<UserDto> getAllLoggedUsers();
 }

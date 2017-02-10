@@ -1,6 +1,6 @@
 package com.msut.web;
 
-import com.msut.domain.User;
+import com.msut.dto.UserDto;
 import com.msut.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -28,22 +28,21 @@ public class WebSocketController {
 
     @MessageMapping("/chat.login")
     @SendTo("/chat.login")
-    public User newLoggedUser(Principal principal) {
+    public UserDto connectToServer(Principal principal) {
         return userService.addNewUser(principal.getName());
     }
 
     @MessageMapping("/chat.logout")
     @SendTo("/chat.logout")
-    public User disconnectFromServer(Principal principal) {
-        User user = userService.loadUserByUsername(principal.getName());
-        userService.removeUser(principal.getName());
-        return user;
+    public UserDto disconnectFromServer(Principal principal) {
+        return userService.removeUser(principal.getName());
     }
 
     @SubscribeMapping("/chat.users")
-    public List<User> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         System.out.println(userService.getAllLoggedUsers());
         return userService.getAllLoggedUsers();
     }
+
 
 }

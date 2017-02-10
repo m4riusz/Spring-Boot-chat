@@ -1,16 +1,20 @@
 package com.msut.service;
 
 import com.msut.domain.User;
+import com.msut.dto.UserDto;
 import com.msut.exception.UserAlreadyConnectedException;
+import com.msut.mappers.UserMapper;
 import com.msut.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by mariusz on 06.02.17.
@@ -20,22 +24,24 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final Set<User> connectedUsers;
+    private final UserMapper userMapper;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
         this.connectedUsers = new HashSet<>();
     }
 
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll().stream().map(userMapper::userToUserDto).collect(toList());
     }
 
     @Override
-    public List<User> getAllLoggedUsers() {
-        return new ArrayList<>(connectedUsers);
+    public List<UserDto> getAllLoggedUsers() {
+        return connectedUsers.stream().map(userMapper::userToUserDto).collect(toList());
     }
 
     @Override
@@ -44,16 +50,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User addNewUser(String username) {
+    public UserDto addNewUser(String username) {
         User newUser = loadUserByUsername(username);
         if (!connectedUsers.add(newUser)) {
             throw new UserAlreadyConnectedException(username);
         }
-        return newUser;
+        return userMapper.userToUserDto(newUser);
     }
 
     @Override
-    public void removeUser(String username) {
-        connectedUsers.remove(loadUserByUsername(username));
+    public UserDto removeUser(String username) {
+        User user = loadUserByUsername(username);
+        connectedUsers.remove(user);
+        return userMapper.userToUserDto(user);
     }
 }
