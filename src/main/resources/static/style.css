@@ -1,9 +1,8 @@
 div#chat-window {
     height: 300px;
-    overflow: scroll;
-    background: #e1e1e8;
+    overflow-x: hidden;
 }
 
-input#message{
-
+div#chat-form {
+    padding: 20px;
 }

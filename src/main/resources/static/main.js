@@ -9,20 +9,7 @@ new Vue({
         client: {},
         users: [],
         message: "",
-        messages: [
-            {text: "kek", owner: "Keksimus Maximus"},
-            {text: "kek1", owner: "Keksimus Maximus"},
-            {text: "kek2", owner: "Keksimus Maximus"},
-            {text: "kek3", owner: "Keksimus Maximus"},
-            {text: "kek4", owner: "Keksimus Maximus"},
-            {text: "kek5", owner: "Keksimus Maximus"},
-            {text: "kek6", owner: "Keksimus Maximus"},
-            {text: "kek7", owner: "Keksimus Maximus"},
-            {text: "kek8", owner: "Keksimus Maximus"},
-            {text: "kek9", owner: "Keksimus Maximus"},
-            {text: "kek10", owner: "Keksimus Maximus"},
-            {text: "kek11", owner: "Keksimus Maximus"}
-        ]
+        messages: []
     },
     methods: {
         connect() {
@@ -31,6 +18,7 @@ new Vue({
             this.client.connect({}, (frame) => {
                 this.connected = true;
                 this.subscribeToUsers();
+                this.subscribeToMessages();
                 this.client.send("/app/chat.login", {}, "");
             });
         },
@@ -50,14 +38,22 @@ new Vue({
             this.client.subscribe("/chat.login", (response) => {
                 this.users.push(JSON.parse(response.body));
             });
-
             this.client.subscribe("/chat.logout", (response) => {
                 this.users = this.users.filter(user => user.username != JSON.parse(response.body).username);
             });
         },
 
+        subscribeToMessages(){
+            this.client.subscribe("/app/chat.message.all", (response) => {
+                this.messages = JSON.parse(response.body);
+            });
+            this.client.subscribe("/chat.message.new", (response) => {
+                this.messages.push(JSON.parse(response.body));
+            })
+        },
+
         send(){
-            this.messages.push({text: this.message, owner: "ICH"});
+            this.client.send("/app/chat.message.create", {}, JSON.stringify({content: this.message}));
         }
     }
 });
