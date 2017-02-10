@@ -1,21 +1,17 @@
-package com.msut.domain;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+package com.msut.dto;
 
 import java.time.LocalDateTime;
 
 /**
  * Created by mariusz on 10.02.17.
  */
-@Document
-public class Message {
 
-    @Id
+public class MessageDto {
+
     private String id;
     private LocalDateTime createDate;
-    private User owner;
-    private String text;
+    private UserDto creator;
+    private String content;
 
     public String getId() {
         return id;
@@ -33,19 +29,19 @@ public class Message {
         this.createDate = createDate;
     }
 
-    public User getOwner() {
-        return owner;
+    public UserDto getCreator() {
+        return creator;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public void setCreator(UserDto creator) {
+        this.creator = creator;
     }
 
-    public String getText() {
-        return text;
+    public String getContent() {
+        return content;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setContent(String content) {
+        this.content = content;
     }
 }
