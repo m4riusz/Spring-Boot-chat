@@ -2,10 +2,8 @@ package com.msut.domain;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -18,16 +16,36 @@ public class User implements UserDetails {
     private String id;
     private String username;
     private String password;
-    private Set<Role> roles;
+    private Set<Authority> authorities;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+    }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
     public String getPassword() {
         return password;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override
@@ -69,4 +87,5 @@ public class User implements UserDetails {
     public int hashCode() {
         return username.hashCode();
     }
+
 }

@@ -5,11 +5,11 @@ import org.springframework.security.core.GrantedAuthority;
 /**
  * Created by mariusz on 06.02.17.
  */
-public class Role implements GrantedAuthority {
+public class Authority implements GrantedAuthority {
 
     private String name;
 
-    public Role(String name) {
+    public Authority(String name) {
         this.name = name;
     }
 
