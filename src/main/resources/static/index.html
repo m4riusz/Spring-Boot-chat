@@ -16,6 +16,10 @@
     <div v-if="connected">
         You have been connected to server!
         <p>People online {{users.length}}!</p>
+        <div class="alert alert-danger alert-dismissible" v-if="error != ''">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+            <strong>Error!</strong> {{error}}
+        </div>
         <div class="col-sm-2">
             <h4 v-for="user in users"><i class="glyphicon glyphicon-user"></i> {{user.username}}</h4>
         </div>

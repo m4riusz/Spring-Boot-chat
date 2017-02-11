@@ -1,15 +1,17 @@
 /**
  * Created by mariusz on 09.02.17.
  */
-new Vue({
+let main = new Vue({
     el: '#main',
     data: {
         welcome: "Welcome to simple chat application",
+        currentUser: {},
         connected: false,
         client: {},
         users: [],
         message: "",
-        messages: []
+        messages: [],
+        error: ''
     },
     updated(){
         this.scrollDownChat();
@@ -39,7 +41,10 @@ new Vue({
                 this.client.send("/app/chat.login", {}, "");
             });
             this.client.subscribe("/chat.login", (response) => {
-                this.users.push(JSON.parse(response.body));
+                this.currentUser = JSON.parse(response.body);
+                this.users.push(this.currentUser);
+                this.subscribeToError();
+
             });
             this.client.subscribe("/chat.logout", (response) => {
                 this.users = this.users.filter(user => user.username != JSON.parse(response.body).username);
@@ -55,8 +60,16 @@ new Vue({
             })
         },
 
+        subscribeToError(){
+            console.log(this.currentUser);
+            this.client.subscribe(`/${this.currentUser.username}/chat.error`, (response) => {
+                this.error = response.body;
+            });
+        },
+
         send(){
             this.client.send("/app/chat.message.create", {}, JSON.stringify({content: this.message}));
+            this.error = "";
         },
 
         scrollDownChat(){
