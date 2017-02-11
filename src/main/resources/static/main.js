@@ -11,6 +11,9 @@ new Vue({
         message: "",
         messages: []
     },
+    updated(){
+        this.scrollDownChat();
+    },
     methods: {
         connect() {
             let websocket = new SockJS("/ws");
@@ -19,7 +22,6 @@ new Vue({
                 this.connected = true;
                 this.subscribeToUsers();
                 this.subscribeToMessages();
-                this.client.send("/app/chat.login", {}, "");
             });
         },
 
@@ -34,6 +36,7 @@ new Vue({
         subscribeToUsers() {
             this.client.subscribe("/app/chat.users", (response) => {
                 this.users = JSON.parse(response.body);
+                this.client.send("/app/chat.login", {}, "");
             });
             this.client.subscribe("/chat.login", (response) => {
                 this.users.push(JSON.parse(response.body));
@@ -45,7 +48,7 @@ new Vue({
 
         subscribeToMessages(){
             this.client.subscribe("/app/chat.message.all", (response) => {
-                this.messages = JSON.parse(response.body);
+                this.messages = JSON.parse(response.body).reverse();
             });
             this.client.subscribe("/chat.message.new", (response) => {
                 this.messages.push(JSON.parse(response.body));
@@ -54,6 +57,13 @@ new Vue({
 
         send(){
             this.client.send("/app/chat.message.create", {}, JSON.stringify({content: this.message}));
+        },
+
+        scrollDownChat(){
+            let chat = document.getElementById("chat-window");
+            if (chat != null) {
+                chat.scrollTop = chat.scrollHeight;
+            }
         }
     }
 });
