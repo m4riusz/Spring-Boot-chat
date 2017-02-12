@@ -20,6 +20,8 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
+import static com.msut.config.Route.*;
+
 /**
  * Created by mariusz on 05.02.17.
  */
@@ -36,24 +38,24 @@ public class WebSocketController {
         this.messageService = messageService;
     }
 
-    @SubscribeMapping("/chat.users")
+    @SubscribeMapping(CHAT_USER)
     public List<UserDto> getAllUsers() {
         return userService.getAllLoggedUsers();
     }
 
-    @MessageMapping("/chat.message.create")
-    @SendTo("/chat.message.new")
+    @MessageMapping(CHAT_MESSAGE)
+    @SendTo(CHAT_MESSAGE)
     public MessageDto createMessage(@Valid @Payload NewMessageDto newMessageDto, Principal principal) {
         return messageService.createMessage(newMessageDto, userService.loadUserByUsername(principal.getName()));
     }
 
-    @SubscribeMapping("/chat.message.all")
+    @SubscribeMapping(CHAT_MESSAGE)
     public List<MessageDto> getAllMessages() {
         return messageService.getLatestMessages(0);
     }
 
     @MessageExceptionHandler
-    @SendToUser("/chat.error")
+    @SendToUser(CHAT_ERROR)
     public String handleException(MethodArgumentNotValidException ex) {
         BindingResult bindingResult = ex.getBindingResult();
         return bindingResult.getFieldError().getDefaultMessage();

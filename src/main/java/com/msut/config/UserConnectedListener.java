@@ -7,6 +7,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 
+import static com.msut.config.Route.LOGIN;
+
 /**
  * Created by mariusz on 12.02.17.
  */
@@ -25,6 +27,6 @@ public class UserConnectedListener implements ApplicationListener<SessionConnect
     @Override
     public void onApplicationEvent(SessionConnectedEvent sessionConnectedEvent) {
         String connectedUser = sessionConnectedEvent.getUser().getName();
-        simpMessagingTemplate.convertAndSend("/chat.login", userService.userConnected(connectedUser));
+        simpMessagingTemplate.convertAndSend(LOGIN, userService.userConnected(connectedUser));
     }
 }

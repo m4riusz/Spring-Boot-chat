@@ -6,13 +6,12 @@ import com.msut.exception.UserAlreadyConnectedException;
 import com.msut.mappers.UserMapper;
 import com.msut.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.stream.Collectors.toList;
 
@@ -30,7 +29,7 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
-        this.connectedUsers = new HashSet<>();
+        this.connectedUsers = ConcurrentHashMap.newKeySet();
     }
 
 
@@ -50,7 +49,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto addNewUser(String username) {
+    public UserDto userConnected(String username) {
         User newUser = loadUserByUsername(username);
         if (!connectedUsers.add(newUser)) {
             throw new UserAlreadyConnectedException(username);
@@ -59,7 +58,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto removeUser(String username) {
+    public UserDto userDisconnected(String username) {
         User user = loadUserByUsername(username);
         connectedUsers.remove(user);
         return userMapper.userToUserDto(user);

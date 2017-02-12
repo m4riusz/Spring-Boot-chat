@@ -28,17 +28,14 @@ let main = new Vue({
         },
 
         disconnect() {
-            this.client.send("/app/chat.logout", {}, "");
             this.client.disconnect(() => {
                 this.connected = false;
             });
-
         },
 
         subscribeToUsers() {
             this.client.subscribe("/app/chat.users", (response) => {
                 this.users = JSON.parse(response.body);
-                this.client.send("/app/chat.login", {}, "");
             });
             this.client.subscribe("/chat.login", (response) => {
                 this.currentUser = JSON.parse(response.body);
@@ -52,10 +49,10 @@ let main = new Vue({
         },
 
         subscribeToMessages(){
-            this.client.subscribe("/app/chat.message.all", (response) => {
+            this.client.subscribe("/app/chat.message", (response) => {
                 this.messages = JSON.parse(response.body).reverse();
             });
-            this.client.subscribe("/chat.message.new", (response) => {
+            this.client.subscribe("/chat.message", (response) => {
                 this.messages.push(JSON.parse(response.body));
             })
         },
@@ -68,7 +65,7 @@ let main = new Vue({
         },
 
         send(){
-            this.client.send("/app/chat.message.create", {}, JSON.stringify({content: this.message}));
+            this.client.send("/app/chat.message", {}, JSON.stringify({content: this.message}));
             this.error = "";
         },
 

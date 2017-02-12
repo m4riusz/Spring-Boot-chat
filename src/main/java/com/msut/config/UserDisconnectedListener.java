@@ -7,6 +7,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import static com.msut.config.Route.CHAT_LOGOUT;
+
 /**
  * Created by mariusz on 12.02.17.
  */
@@ -25,6 +27,6 @@ public class UserDisconnectedListener implements ApplicationListener<SessionDisc
     @Override
     public void onApplicationEvent(SessionDisconnectEvent sessionDisconnectEvent) {
         String disconnectedUser = sessionDisconnectEvent.getUser().getName();
-        simpMessagingTemplate.convertAndSend("/chat.logout", userService.userDisconnected(disconnectedUser));
+        simpMessagingTemplate.convertAndSend(CHAT_LOGOUT, userService.userDisconnected(disconnectedUser));
     }
 }

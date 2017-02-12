@@ -6,6 +6,8 @@ import org.springframework.security.config.annotation.web.socket.AbstractSecurit
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 
+import static com.msut.config.Route.*;
+
 /**
  * Created by mariusz on 05.02.17.
  */
@@ -16,13 +18,13 @@ public class SecurityConfig extends AbstractSecurityWebSocketMessageBrokerConfig
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.setApplicationDestinationPrefixes("/app")
-                .enableSimpleBroker("/chat");
+        registry.setApplicationDestinationPrefixes(APP_PREFIX)
+                .enableSimpleBroker(BROKER_PREFIXES);
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry stompEndpointRegistry) {
-        stompEndpointRegistry.addEndpoint("/ws").withSockJS();
+        stompEndpointRegistry.addEndpoint(WEB_SOCKET).withSockJS();
     }
 
     @Override
