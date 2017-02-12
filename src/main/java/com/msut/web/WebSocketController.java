@@ -36,18 +36,6 @@ public class WebSocketController {
         this.messageService = messageService;
     }
 
-    @MessageMapping("/chat.login")
-    @SendTo("/chat.login")
-    public UserDto connectToServer(Principal principal) {
-        return userService.addNewUser(principal.getName());
-    }
-
-    @MessageMapping("/chat.logout")
-    @SendTo("/chat.logout")
-    public UserDto disconnectFromServer(Principal principal) {
-        return userService.removeUser(principal.getName());
-    }
-
     @SubscribeMapping("/chat.users")
     public List<UserDto> getAllUsers() {
         return userService.getAllLoggedUsers();
